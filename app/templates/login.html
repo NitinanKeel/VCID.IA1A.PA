@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+
+<h1 style="padding-left: 2%; padding-top: 2%;"> Login Page</h1>
+<div style="padding-left: 2%; padding-top: 2%; padding-right: 70%;">
+  <div class="row">
+    <div class="col">
+      <form action="" method="post" novalidate class="border border-2 border-radius p-2">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.username.label(class_='form-label') }}
+          {{ form.username(size=32, class_='form-control') }}
+          {% for error in form.username.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.password.label(class_='form-label') }}
+          {{ form.password(size=32, class_='form-control') }}
+          {% for error in form.password.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.remember_me() }} {{ form.remember_me.label }}
+        </div>
+        <div class="mb-3">
+          {{ form.submit(class_='btn btn-primary') }}
+        </div>
+      </form>
+      <div class="col-sm-8">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

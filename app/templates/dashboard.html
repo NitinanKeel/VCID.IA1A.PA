@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Dashboard</title>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h1 class="text-center"> Your Dashboard</h1>
+    <div style="margin:auto;width:50%">
+        <div class="row text-center">
+            <div class="border bg-light">
+                <h4>Total balance</h4>
+                <h4>{% if total_budget < 0 %} - ${{total_budget|abs}} {% else %} ${{total_budget}} {% endif %} </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border bg-light">
+                <p>Monthly income</p>
+                <p>${{ income }}</p>
+            </div>
+            <div class="col border bg-light">
+                <p>Monthly spending</p>
+                {% set progressvalue = spending / spending_limit * 100 %}
+                {% set widhtvalue = (("%.2f"|format(progressvalue)|string )[:-3])+"%" %}
+                {% if progressvalue < 50 %}
+                {% set progressbarcolor = "bg-success" %}
+                {% elif progressvalue < 75 and progressvalue > 50 %}
+                {% set progressbarcolor = "bg-warning" %}
+                {% elif progressvalue > 75 %}
+                {% set progressbarcolor = "bg-danger" %}
+                {% endif %}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated {{progressbarcolor}}" role="progressbar" aria-valuenow='{{("%.2f"|format(progressvalue)|string )[:-3]}}' aria-valuemin="0" aria-valuemax="100" style="width:{{ widhtvalue }}"></div>
+                  </div>
+                <p>${{ spending }} / ${{ spending_limit }}
+                <form action="" method="post">
+                    {{ editspendingform.hidden_tag() }}
+                    {{ editspendingform.amount2(style_="width:130px;") }}
+                    {% for error in editspendingform.amount2.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    {{ editspendingform.submit2() }}
+                </form>
+            </p>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <h4>Transcation</h4>
+        </div>
+        <div class="row border-bottom border-top">
+            <div class="col" style="border-right: 1px solid #ccc;">
+                <h5>Income</h4>
+            </div>
+            <div class="col">
+                <h5>Spending</h4>
+            </div>
+        </div>
+        {% for budget in budgets %}
+        <div class="row border-bottom">
+            <div class="col" style="border-right: 1px solid #ccc;">
+                {% if budget.income != none %}
+                <p>{{budget.description}}<br>+ ${{budget.income}}<br>{{budget.date}}<a
+                        style="text-align:right;float:right" href="{{ url_for('delete', id=budget.id) }}">Delete</a></p>
+                {% endif %}
+            </div>
+            <div class="col">
+                {% if budget.spending != none %}
+                <p>{{budget.description}}<br>- ${{budget.spending}}<br>{{budget.date}}<a
+                        style="text-align:right;float:right" href="{{ url_for('delete', id=budget.id) }}">Delete</a></p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="row border" style="margin:auto;width:50%; padding: 10px;">
+        <form action="" method="post">
+            <div class="row">
+                <div class="col">
+                    {{ form.hidden_tag() }}
+                    {{ form.choicefield.label }}<br>
+                    {{ form.choicefield }}<br>
+                    {% for error in form.choicefield.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ form.description.label }}<br>
+                    {{ form.description }}
+                    {% for error in form.description.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+
+                    {{ form.date.label }}<br>
+                    {{ form.date }}<br>
+                    {% for error in form.date.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ form.amount.label }}<br>
+                    {{ form.amount }}<br>
+                    {% for error in form.amount.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+            </div>
+<br>
+            <div class="row">
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

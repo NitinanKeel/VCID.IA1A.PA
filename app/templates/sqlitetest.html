@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>User Data</h1>
+    {% for user in users %}
+        <div class='user'>
+            <h2>Name: {{ user['firstname'] }} {{ user['lastname'] }}</h2>
+            <p>Created at: {{ user['created'] }}</p>
+            <p>User ID: {{ user['u_id'] }}</p>
+            <p>Password: {{ user['u_pw'] }}</p>
+            <p>Username: {{ user['username'] }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

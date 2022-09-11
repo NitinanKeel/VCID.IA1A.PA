@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Account</title>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <h1> Your account </h1>
+    <div class="row">
+        <div class="col">
+            <table class="table  table-borderless">
+                <tr>
+                    <td scope="row">Username:</td>
+                    <td scope="row">{{ current_user.username }}</td>
+                </tr>
+                <tr>
+                    <td scope="row">Firstname:</td>
+                    <td scope="row">{{ current_user.firstname }}</td>
+                </tr>
+                <tr>
+                    <td scope="row">Lastname:</td>
+                    <td scope="row">{{ current_user.lastname }}</td>
+                </tr>
+                <tr>
+                    <td scope="row">Email:</td>
+                    <td scope="row">{{ current_user.email }}</td>
+                </tr>
+                <tr>
+                    <td scope="row">API Key:</td>
+                    <td scope="row">{{ current_user.api_key }}</td>
+                </tr>
+                <tr>
+                    <td scope="row">Is Admin:</td>
+                    <td scope="row">{{ current_user.adminuser }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}

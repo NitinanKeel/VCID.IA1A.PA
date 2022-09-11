@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:latest # Download latest Nginx Version
+    container_name: nginx
+    depends_on:
+      - flask_app
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Config file for reverse HTTP Proxy
+    networks:
+      - my-network
+    ports:
+      - 80:80
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: python:3.10.4
+    container_name: flask_bplanner
+    depends_on:
+      - mariadb
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql://root:Secretpassword@mariadb-app:3306/app # SQL connection string
+    command: bash -c "sleep 15 && flask db init && flask db migrate && flask db upgrade && python -m flask --app=bplanner.py run --host=0.0.0.0" # Initial db creation and start flask app
+    networks:
+      my-network:
+        aliases:
+            - flask-app
+  mariadb:
+    image: mariadb:latest
+    command: --init-file /data/application/init.sql # Init SQL Schema
+    volumes:
+      - ~/apps/mariadb:/var/lib/mysql
+      - ./init.sql:/data/application/init.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Secretpassword  #SQL Password String
+      - MYSQL_DATABASE=app
+    ports:
+      - 3306:3306
+    networks:
+      my-network:
+        aliases:
+            - mariadb-app
+networks:
+    my-network:
